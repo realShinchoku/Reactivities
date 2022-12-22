@@ -24,7 +24,7 @@ function ActivityDashboard() {
                 <ActivityList/>
             </Grid.Column>
             <Grid.Column width={'6'}>
-                
+                <h2>Activity fillter</h2>
             </Grid.Column>
         </Grid>
     )
