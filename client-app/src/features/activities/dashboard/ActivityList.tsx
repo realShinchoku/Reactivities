@@ -18,7 +18,7 @@ function ActivityList() {
                     </Header>
 
                     {activities.map(
-                        (activity) => <ActivityListItem activity={activity}/>
+                        (activity) => <ActivityListItem key={activity.id} activity={activity}/>
                     )}
                 </Fragment>
             ))}
