@@ -7,12 +7,12 @@ import ActivityForm from "../../features/activities/form/ActivityForm";
 export const routes: RouteObject[] = [
     {
         path: '/',
-        element: <App />,
+        element: <App/>,
         children: [
-            {path: 'activities', element: <ActivityDashboard />},
-            {path: 'activities/:id', element: <ActivityDetails />},
-            {path: 'createActivity', element: <ActivityForm key={'create'} />},
-            {path: 'manage/:id', element: <ActivityForm key={'manage'} />},
+            {path: 'activities', element: <ActivityDashboard/>},
+            {path: 'activities/:id', element: <ActivityDetails/>},
+            {path: 'createActivity', element: <ActivityForm key={'create'}/>},
+            {path: 'manage/:id', element: <ActivityForm key={'manage'}/>},
         ],
     }
 ]

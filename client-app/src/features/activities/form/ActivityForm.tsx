@@ -14,7 +14,7 @@ function ActivityForm() {
     const {id} = useParams();
     const navigate = useNavigate();
 
-    const [activity,setActivity] = useState<Activity>({
+    const [activity, setActivity] = useState<Activity>({
         id: '',
         title: '',
         category: '',
@@ -23,17 +23,16 @@ function ActivityForm() {
         city: '',
         venue: ''
     })
-    
+
     useEffect(() => {
         if (id) loadActivity(id).then(activity => setActivity(activity!));
-    },[id,loadActivity]);
+    }, [id, loadActivity]);
 
     function handleSubmit() {
-        if(!activity.id){
+        if (!activity.id) {
             activity.id = uuid();
             createActivity(activity).then(() => navigate(`/activities/${activity.id}`));
-        }
-        else{
+        } else {
             updateActivity(activity).then(() => navigate(`/activities/${activity.id}`));
         }
     }
@@ -42,8 +41,8 @@ function ActivityForm() {
         const {name, value} = event.target;
         setActivity({...activity, [name]: value});
     }
-    
-    if(loadingInitial) return <LoadingComponent content={'Loading activity...'}/>
+
+    if (loadingInitial) return <LoadingComponent content={'Loading activity...'}/>
 
     return (
         <Segment clearing>

@@ -21,6 +21,16 @@ export default class ActivityStore {
             );
     }
 
+    get groupedActivities() {
+        return Object.entries(
+            this.activitiesByDate.reduce((activities, activity) => {
+                const date = activity.date;
+                activities[date] = activities[date] ? [...activities[date], activity] : [activity];
+                return activities;
+            }, {} as { [key: string]: Activity[] })
+        )
+    }
+
     loadActivities = async () => {
         this.setLoadingInitial(true);
         try {
@@ -34,14 +44,13 @@ export default class ActivityStore {
             this.setLoadingInitial(false);
         }
     }
-    
+
     loadActivity = async (id: string) => {
         let activity = this.getActivity(id);
         if (activity) {
             this.selectedActivity = activity;
             return activity;
-        }
-        else {
+        } else {
             this.setLoadingInitial(true);
             try {
                 activity = await agent.Activities.details(id);
@@ -49,24 +58,15 @@ export default class ActivityStore {
                 runInAction(() => this.selectedActivity = activity)
                 this.setLoadingInitial(false);
                 return activity;
-            }
-            catch(error){
+            } catch (error) {
                 console.log(error);
                 this.setLoadingInitial(false);
             }
         }
     }
-    
-    private setActivity = (activity: Activity) => {
-        activity.date = activity.date.split('T')[0];
-        this.activityRegistry.set(activity.id, activity);
-    }
-    private getActivity = (id: string) => {
-        return this.activityRegistry.get(id);
-    }
 
     setLoadingInitial = (state: boolean) => this.loadingInitial = state;
-    
+
     createActivity = async (activity: Activity) => {
         this.loading = true;
         try {
@@ -111,5 +111,14 @@ export default class ActivityStore {
             console.log(error);
             runInAction(() => this.loading = false);
         }
+    }
+
+    private setActivity = (activity: Activity) => {
+        activity.date = activity.date.split('T')[0];
+        this.activityRegistry.set(activity.id, activity);
+    }
+
+    private getActivity = (id: string) => {
+        return this.activityRegistry.get(id);
     }
 }
