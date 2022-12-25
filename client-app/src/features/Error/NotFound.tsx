@@ -5,10 +5,10 @@ export default function NotFound() {
     return (
         <Segment placeholder>
             <Header icon>
-                <Icon name={"search"} />
+                <Icon name={"search"}/>
                 Oops - can't find what you're looking for!
             </Header>
-            <Segment.Inline >
+            <Segment.Inline>
                 <Button as={Link} to={'/activities'}>
                     Return to Activities Page
                 </Button>

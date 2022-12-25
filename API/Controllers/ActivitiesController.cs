@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using Application.Activities;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -19,13 +19,13 @@ public class ActivitiesController : BaseApiController
     }
 
     [HttpPost] //api/activities/Add
-    public async Task<IActionResult> CreateActivity(Domain.Activity activity)
+    public async Task<IActionResult> CreateActivity(Activity activity)
     {
         return HandleResult(await Mediator.Send(new Create.Command { Activity = activity }));
     }
 
     [HttpPut("{id}")] //api/activities/Edit
-    public async Task<IActionResult> EditActivity(Guid id, Domain.Activity activity)
+    public async Task<IActionResult> EditActivity(Guid id, Activity activity)
     {
         activity.Id = id;
         return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));

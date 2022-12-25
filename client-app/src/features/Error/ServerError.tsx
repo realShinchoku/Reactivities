@@ -3,16 +3,16 @@ import {useStore} from "../../app/stores/store";
 import {Container, Header, Segment} from "semantic-ui-react";
 import React from "react";
 
-function ServerError(){
+function ServerError() {
     const {commonStore} = useStore();
     return (
         <Container>
-            <Header as={'h1'} content={'Server Error'} />
-            <Header sub as={'h5'} color={"red"} content={commonStore.error?.message} />
-            {commonStore.error?.details &&(
+            <Header as={'h1'} content={'Server Error'}/>
+            <Header sub as={'h5'} color={"red"} content={commonStore.error?.message}/>
+            {commonStore.error?.details && (
                 <Segment>
-                    <Header as={'h4'} content={"Stack trace"} color={"teal"} />
-                    <code style={{marginTop : '10px'}}>{commonStore.error.details}</code>
+                    <Header as={'h4'} content={"Stack trace"} color={"teal"}/>
+                    <code style={{marginTop: '10px'}}>{commonStore.error.details}</code>
                 </Segment>
             )}
         </Container>

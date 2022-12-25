@@ -16,10 +16,10 @@ export const routes: RouteObject[] = [
             {path: 'activities/:id', element: <ActivityDetails/>},
             {path: 'createActivity', element: <ActivityForm key={'create'}/>},
             {path: 'manage/:id', element: <ActivityForm key={'manage'}/>},
-            {path: 'errors', element: <TestErrors />},
-            {path: 'not-found', element: <NotFound />},
-            {path: 'server-error', element: <ServerError />},
-            {path: '*', element: <Navigate replace to={'/not-found'} />},
+            {path: 'errors', element: <TestErrors/>},
+            {path: 'not-found', element: <NotFound/>},
+            {path: 'server-error', element: <ServerError/>},
+            {path: '*', element: <Navigate replace to={'/not-found'}/>},
         ],
     }
 ]

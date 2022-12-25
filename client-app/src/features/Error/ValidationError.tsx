@@ -1,10 +1,10 @@
 ﻿import {Message} from "semantic-ui-react";
 
-interface  Props{
+interface Props {
     errors: string[];
 }
 
-export default function ValidationError({errors}: Props){
+export default function ValidationError({errors}: Props) {
     return (
         <Message error>
             {errors && (
@@ -16,5 +16,5 @@ export default function ValidationError({errors}: Props){
             )}
         </Message>
     )
-    
+
 }

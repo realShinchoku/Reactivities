@@ -19,18 +19,19 @@ axios.interceptors.response.use(async response => {
     const {data, status, config} = error.response as AxiosResponse;
     switch (status) {
         case 400:
-            if(config.method === 'get' && data.errors.hasOwnProperty('id'))
+            if (typeof (data) === "string")
+                toast.error('Bad request');
+            else if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
                 router.navigate('/not-found');
-            
-            if (data.errors){
+            } else if (data.errors) {
                 const modelStateErrors = [];
-                for(const key in data.errors){
-                    if(data.errors[key])
+                for (const key in data.errors) {
+                    if (data.errors[key])
                         modelStateErrors.push(data.errors[key]);
                 }
-                throw modelStateErrors.flat();
+                if (modelStateErrors.length > 0)
+                    throw modelStateErrors.flat();
             }
-            else toast.error(data);
             break;
         case 401:
             toast.error('Unauthorized');
