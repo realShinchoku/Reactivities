@@ -43,12 +43,14 @@ public class AccountController : BaseApiController
     {
         if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
         {
-            return BadRequest("UserName is already taken");
+            ModelState.AddModelError("userName","Username is already taken");
+            return BadRequest(ModelState);
         }
         
         if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
         {
-            return BadRequest("Email is already taken");
+            ModelState.AddModelError("email","Email is already taken");
+            return BadRequest(ModelState);
         }
 
         var user = new AppUser
