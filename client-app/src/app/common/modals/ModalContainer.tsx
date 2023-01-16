@@ -2,10 +2,10 @@
 import {useStore} from "../../stores/store";
 import {Modal} from "semantic-ui-react";
 
-function ModalContainer(){
+function ModalContainer() {
     const {modalStore} = useStore();
-    
-    return(
+
+    return (
         <Modal open={modalStore.modal.open} onClose={modalStore.closeModal} size={"mini"}>
             <Modal.Content>
                 {modalStore.modal.body}
@@ -14,4 +14,4 @@ function ModalContainer(){
     )
 }
 
-export default  observer(ModalContainer);
+export default observer(ModalContainer);

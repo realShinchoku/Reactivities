@@ -8,23 +8,23 @@ export default class CommonStore {
 
     constructor() {
         makeAutoObservable(this);
-        
-        reaction(() => this.token, 
-                token => {
-            if(token)
-                localStorage.setItem('jwt', token);
-            else
-                localStorage.removeItem('jwt');
-        })
+
+        reaction(() => this.token,
+            token => {
+                if (token)
+                    localStorage.setItem('jwt', token);
+                else
+                    localStorage.removeItem('jwt');
+            })
     }
 
     setServerError(err: ServerError) {
         this.error = err;
     }
-    
-    setToken = (token: string | null) =>{
+
+    setToken = (token: string | null) => {
         this.token = token;
     }
-    
+
     setAppLoaded = () => this.appLoaded = true;
 }

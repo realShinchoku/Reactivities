@@ -7,7 +7,7 @@ import RegisterForm from "../users/RegisterForm";
 
 function HomePage() {
     const {userStore, modalStore} = useStore()
-    
+
     return (
         <Segment inverted textAlign={'center'} vertical className={'masthead'}>
             <Container text>
@@ -22,17 +22,17 @@ function HomePage() {
                             Go to Activities!
                         </Button>
                     </>
-                ):(
+                ) : (
                     <>
-                        <Button onClick={() => modalStore.openModal(<LoginForm />)} size={'huge'} inverted>
+                        <Button onClick={() => modalStore.openModal(<LoginForm/>)} size={'huge'} inverted>
                             Login!
                         </Button>
-                        <Button onClick={() => modalStore.openModal(<RegisterForm />)} size={'huge'} inverted>
+                        <Button onClick={() => modalStore.openModal(<RegisterForm/>)} size={'huge'} inverted>
                             Register
                         </Button>
                     </>
                 )}
-                
+
             </Container>
         </Segment>
     )

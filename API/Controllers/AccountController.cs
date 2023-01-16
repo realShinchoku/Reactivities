@@ -20,7 +20,7 @@ public class AccountController : BaseApiController
         _tokenService = tokenService;
         _userManager = userManager;
     }
-    
+
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
@@ -43,13 +43,13 @@ public class AccountController : BaseApiController
     {
         if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
         {
-            ModelState.AddModelError("userName","Username is already taken");
+            ModelState.AddModelError("userName", "Username is already taken");
             return BadRequest(ModelState);
         }
-        
+
         if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
         {
-            ModelState.AddModelError("email","Email is already taken");
+            ModelState.AddModelError("email", "Email is already taken");
             return BadRequest(ModelState);
         }
 
@@ -72,10 +72,10 @@ public class AccountController : BaseApiController
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
         var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
-        
+
         return CreateUserObject(user);
     }
-    
+
     private UserDto CreateUserObject(AppUser user)
     {
         return new UserDto

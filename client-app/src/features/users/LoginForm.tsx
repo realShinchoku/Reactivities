@@ -4,25 +4,25 @@ import {Button, Header, Label} from "semantic-ui-react";
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../app/stores/store";
 
-function LoginForm(){
+function LoginForm() {
     const {userStore} = useStore();
-    
+
     return (
         <Formik
-            initialValues={{email:'', password:'', error:null}}
-            onSubmit={(values,{setErrors}) => userStore.login(values).catch(error =>
+            initialValues={{email: '', password: '', error: null}}
+            onSubmit={(values, {setErrors}) => userStore.login(values).catch(error =>
                 setErrors({error: 'Invalid email or password'}))}
         >
-            {({handleSubmit, isSubmitting, errors}) =>(
+            {({handleSubmit, isSubmitting, errors}) => (
                 <Form className="ui form" onSubmit={handleSubmit} autoComplete={'off'}>
-                    <Header as={'h2'} content={"Login to Reactivities"} color={'teal'} textAlign={"center"} />
+                    <Header as={'h2'} content={"Login to Reactivities"} color={'teal'} textAlign={"center"}/>
                     <MyTextInput placeholder={'Email'} name={'email'}/>
                     <MyTextInput placeholder={'Password'} name={'password'} type={'password'}/>
                     <ErrorMessage
                         name={'error'}
-                        render={() => <Label style={{marginBottom: 10}} basic color={"red"} content={errors.error} />}
+                        render={() => <Label style={{marginBottom: 10}} basic color={"red"} content={errors.error}/>}
                     />
-                    <Button loading={isSubmitting} type={'submit'} positive fluid content={'Login'} />
+                    <Button loading={isSubmitting} type={'submit'} positive fluid content={'Login'}/>
                 </Form>
             )}
         </Formik>
