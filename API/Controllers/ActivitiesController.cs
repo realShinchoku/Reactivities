@@ -12,19 +12,19 @@ public class ActivitiesController : BaseApiController
     {
         return HandleResult(await Mediator.Send(new List.Query()));
     }
-    
+
     [HttpGet("{id}")] //api/activities/abc123
     public async Task<IActionResult> GetActivity(Guid id)
     {
         return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
     }
-    
+
     [HttpPost] //api/activities/Add
     public async Task<IActionResult> CreateActivity(Activity activity)
     {
         return HandleResult(await Mediator.Send(new Create.Command { Activity = activity }));
     }
-    
+
     [Authorize(Policy = "IsActivityHost")]
     [HttpPut("{id}")] //api/activities/Edit
     public async Task<IActionResult> EditActivity(Guid id, Activity activity)
@@ -39,8 +39,7 @@ public class ActivitiesController : BaseApiController
     {
         return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
     }
-    
-    [Authorize(Policy = "IsActivityHost")]
+
     [HttpPost("{id}/attend")]
     public async Task<IActionResult> Attend(Guid id)
     {
