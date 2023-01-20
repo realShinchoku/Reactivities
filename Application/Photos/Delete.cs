@@ -13,7 +13,7 @@ public class Delete
         public string Id { get; set; }
     }
 
-    class Handler : IRequestHandler<Command, Result<Unit>>
+    private class Handler : IRequestHandler<Command, Result<Unit>>
     {
         private readonly DataContext _context;
         private readonly IPhotoAccessor _photoAccessor;
@@ -34,13 +34,13 @@ public class Delete
             if (user == null) return null;
 
             var photo = user.Photos.FirstOrDefault(x => x.Id == request.Id);
-            
+
             if (photo == null) return null;
 
             if (photo.IsMain) return Result<Unit>.Failure("You cannot delete photo your main photo");
 
             var result = await _photoAccessor.DeletePhoto(photo.Id);
-            
+
             if (result == null) return Result<Unit>.Failure("Problem deleting photo from Cloudinary");
 
             user.Photos.Remove(photo);

@@ -32,8 +32,8 @@ public class Add
         {
             var user = await _context.Users.Include(p => p.Photos)
                 .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName());
-            
-            if(user == null) return null;
+
+            if (user == null) return null;
 
             var photoUploadResult = await _photoAccessor.AddPhoto(request.File);
 
@@ -45,7 +45,7 @@ public class Add
 
             if (!user.Photos.Any(x => x.IsMain))
                 photo.IsMain = true;
-            
+
             user.Photos.Add(photo);
 
             var result = await _context.SaveChangesAsync() > 0;

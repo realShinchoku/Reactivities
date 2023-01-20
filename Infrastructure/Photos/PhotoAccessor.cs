@@ -10,7 +10,7 @@ namespace Infrastructure.Photos;
 public class PhotoAccessor : IPhotoAccessor
 {
     private readonly Cloudinary _cloudinary;
-    
+
     public PhotoAccessor(IOptions<CloudinarySettings> config)
     {
         var account = new Account(
@@ -34,10 +34,7 @@ public class PhotoAccessor : IPhotoAccessor
 
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
-            if (uploadResult.Error != null)
-            {
-                throw new Exception(uploadResult.Error.Message);
-            }
+            if (uploadResult.Error != null) throw new Exception(uploadResult.Error.Message);
 
             return new PhotoUploadResult
             {

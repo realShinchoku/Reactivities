@@ -1,5 +1,5 @@
 ﻿import {Button, Container, Dropdown, Image, Menu} from "semantic-ui-react";
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import {useStore} from "../stores/store";
 import {observer} from "mobx-react-lite";
 
@@ -23,8 +23,8 @@ function NavBar() {
                     <Image src={user?.image || '/assets/user.png'} avatar spaced={"right"}/>
                     <Dropdown pointing={'top left'} text={user?.displayName}>
                         <Dropdown.Menu>
-                            <Dropdown.Item /**as={Link} to={`/profile/${user?.username}`}*/ text={'My Profile'}
-                                                                                            icon={'user'}/>
+                            <Dropdown.Item as={Link} to={`/profiles/${user?.userName}`} text={'My Profile'}
+                                           icon={'user'}/>
                             <Dropdown.Item onClick={logout} text={'Log out'} icon={'power'}/>
                         </Dropdown.Menu>
                     </Dropdown>

@@ -30,7 +30,7 @@ public class Details
             var user = await _context.Users
                 .ProjectTo<Profile>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(x => x.UserName == request.UserName);
-            
+
             return Result<Profile>.Success(user);
         }
     }
