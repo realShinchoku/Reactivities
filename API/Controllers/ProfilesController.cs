@@ -14,6 +14,6 @@ public class ProfilesController : BaseApiController
     [HttpPut("")]
     public async Task<IActionResult> EditProfile(ProfileEditDto profileEditDto)
     {
-        return HandleResult(await Mediator.Send(new Edit.Command{Profile = profileEditDto}));
+        return HandleResult(await Mediator.Send(new Edit.Command { Profile = profileEditDto }));
     }
 }

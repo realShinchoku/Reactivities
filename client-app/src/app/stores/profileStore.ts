@@ -88,28 +88,27 @@ export default class ProfileStore {
             console.log(e);
         }
     }
-    
+
     editProfile = async (profile: ProfileFormValues) => {
         this.loading = true;
         try {
             await agent.Profiles.editProfile(profile);
             await runInAction(async () => {
-                if(this.profile){
+                if (this.profile) {
                     let updatedProfile = {...this.profile, ...profile}
                     this.profile = updatedProfile as Profile;
                     store.userStore.setDisplayName(updatedProfile.displayName);
                     await store.activityStore.loadActivities();
                     store.activityStore.activityRegistry.forEach(activity => {
                         activity.attendees.map(p => {
-                            if(p.userName === updatedProfile.userName)
+                            if (p.userName === updatedProfile.userName)
                                 p = updatedProfile as Profile;
                         });
                     });
                 }
                 this.loading = false;
             })
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e);
             runInAction(() => this.loading = false);
         }

@@ -93,7 +93,7 @@ const Profiles = {
     },
     setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
     deletePhoto: (id: string) => requests.delete(`/photos/${id}`),
-    editProfile: (profile: ProfileFormValues) => requests.put('/profiles',profile)
+    editProfile: (profile: ProfileFormValues) => requests.put('/profiles', profile)
 }
 
 const agent = {

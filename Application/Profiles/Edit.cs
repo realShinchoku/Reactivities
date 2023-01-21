@@ -1,5 +1,4 @@
-﻿using Application.Activities;
-using Application.Core;
+﻿using Application.Core;
 using Application.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -14,7 +13,7 @@ public class Edit
     {
         public ProfileEditDto Profile { get; set; }
     }
-    
+
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
@@ -23,7 +22,7 @@ public class Edit
         }
     }
 
-    class Handler : IRequestHandler<Command, Result<Unit>>
+    private class Handler : IRequestHandler<Command, Result<Unit>>
     {
         private readonly DataContext _context;
         private readonly IUserAccessor _userAccessor;
@@ -33,6 +32,7 @@ public class Edit
             _context = context;
             _userAccessor = userAccessor;
         }
+
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName());
@@ -40,9 +40,9 @@ public class Edit
             if (user == null) return null;
 
             user.DisplayName = request.Profile.DisplayName;
-            
+
             user.Bio = string.IsNullOrEmpty(request.Profile.Bio) ? user.Bio : request.Profile.Bio;
-            
+
             var result = await _context.SaveChangesAsync() > 0;
             if (!result)
                 return Result<Unit>.Failure("Failed to update activity");

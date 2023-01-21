@@ -25,6 +25,7 @@ export interface Photo {
 export class ProfileFormValues {
     bio?: string = undefined;
     displayName: string = '';
+
     constructor(profile?: ProfileFormValues) {
         if (profile) {
             this.bio = profile.bio;
