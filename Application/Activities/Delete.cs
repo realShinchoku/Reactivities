@@ -25,7 +25,7 @@ public class Delete
             var activity = await _context.Activities.FindAsync(request.Id);
             if (activity == null) return null;
             _context.Remove(activity);
-            var result = await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
             if (!result)
                 return Result<Unit>.Failure("Failed to delete activity");
             return Result<Unit>.Success(Unit.Value);

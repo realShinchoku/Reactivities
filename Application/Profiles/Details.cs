@@ -29,7 +29,7 @@ public class Details
         {
             var user = await _context.Users
                 .ProjectTo<Profile>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(x => x.UserName == request.UserName);
+                .SingleOrDefaultAsync(x => x.UserName == request.UserName, cancellationToken);
 
             return Result<Profile>.Success(user);
         }

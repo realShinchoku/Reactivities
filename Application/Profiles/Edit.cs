@@ -35,17 +35,18 @@ public class Edit
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName());
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName(),
+                cancellationToken);
 
             if (user == null) return null;
 
             user.DisplayName = request.Profile.DisplayName;
 
-            user.Bio = string.IsNullOrEmpty(request.Profile.Bio) ? user.Bio : request.Profile.Bio;
+            user.Bio = request.Profile.Bio == null ? user.Bio : request.Profile.Bio;
 
-            var result = await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
             if (!result)
-                return Result<Unit>.Failure("Failed to update activity");
+                return Result<Unit>.Failure("Failed to update profile");
             return Result<Unit>.Success(Unit.Value);
         }
     }

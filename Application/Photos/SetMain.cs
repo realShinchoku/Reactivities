@@ -27,20 +27,20 @@ public class SetMain
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.Include(p => p.Photos)
-                .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName());
+                .FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName(), cancellationToken);
             if (user == null) return null;
 
             var photo = user.Photos.FirstOrDefault(x => x.Id == request.Id);
 
             if (photo == null) return null;
 
-            var currnetMain = user.Photos.FirstOrDefault(x => x.IsMain);
+            var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
 
-            if (currnetMain != null) currnetMain.IsMain = false;
+            if (currentMain != null) currentMain.IsMain = false;
 
             photo.IsMain = true;
 
-            var success = await _context.SaveChangesAsync() > 0;
+            var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
             if (success) return Result<Unit>.Success(Unit.Value);
 

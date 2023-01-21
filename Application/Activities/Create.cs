@@ -36,7 +36,8 @@ public class Create
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName());
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName(),
+                cancellationToken);
             var attendee = new ActivityAttendee
             {
                 AppUser = user,
@@ -47,7 +48,7 @@ public class Create
 
             _context.Activities.Add(request.Activity);
 
-            var result = await _context.SaveChangesAsync() > 0;
+            var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 
             if (!result)
                 return Result<Unit>.Failure("Failed to create activity");
