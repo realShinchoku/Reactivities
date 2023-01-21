@@ -1,4 +1,4 @@
-﻿import {Photo, Profile} from "../models/profile";
+﻿import {Photo, Profile, ProfileFormValues} from "../models/profile";
 import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent";
 import {store} from "./store";
@@ -58,11 +58,12 @@ export default class ProfileStore {
         try {
             await agent.Profiles.setMainPhoto(photo.id);
             store.userStore.setImage(photo.url);
-            runInAction(() => {
+            await runInAction(async () => {
                 if (this.profile && this.profile.photos) {
                     this.profile.photos.find(p => p.isMain)!.isMain = false;
                     this.profile.photos.find(p => p.id == photo.id)!.isMain = true;
                     this.profile.image = photo.url;
+                    await store.activityStore.loadActivities();
                     this.loading = false;
                 }
             });
@@ -87,4 +88,31 @@ export default class ProfileStore {
             console.log(e);
         }
     }
+    
+    editProfile = async (profile: ProfileFormValues) => {
+        this.loading = true;
+        try {
+            await agent.Profiles.editProfile(profile);
+            await runInAction(async () => {
+                if(this.profile){
+                    let updatedProfile = {...this.profile, ...profile}
+                    this.profile = updatedProfile as Profile;
+                    store.userStore.setDisplayName(updatedProfile.displayName);
+                    await store.activityStore.loadActivities();
+                    store.activityStore.activityRegistry.forEach(activity => {
+                        activity.attendees.map(p => {
+                            if(p.userName === updatedProfile.userName)
+                                p = updatedProfile as Profile;
+                        });
+                    });
+                }
+                this.loading = false;
+            })
+        }
+        catch (e) {
+            console.log(e);
+            runInAction(() => this.loading = false);
+        }
+    }
 }
+

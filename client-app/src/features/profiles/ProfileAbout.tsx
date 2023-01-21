@@ -1,0 +1,38 @@
+﻿import {observer} from "mobx-react-lite";
+import {Button, Card, Grid, Header, Image, Tab} from "semantic-ui-react";
+import PhotoUploadWidget from "../../app/common/imageUpload/PhotoUploadWidget";
+import {useStore} from "../../app/stores/store";
+import {useEffect, useState} from "react";
+import {Profile} from "../../app/models/profile";
+import ProfileAboutForm from "./ProfileAboutForm";
+
+interface Props {
+    profile: Profile;
+}
+function ProfileAbout({profile}: Props) {
+    const {profileStore:{isCurrentUser}} = useStore();
+    const [editMode, setEditMode] = useState(false);
+    
+    return(
+        <Tab.Pane>
+            <Grid>
+                <Grid.Column width={16}>
+                    <Header icon={'user'} content={'About ' + profile.displayName} floated={"left"}/>
+                    {isCurrentUser &&
+                        <Button floated={"right"} basic content={editMode ? 'Cancel' : 'Edit Profile'}
+                                onClick={() => setEditMode(!editMode)}/>
+                    }
+                </Grid.Column>
+                <Grid.Column width={16}>
+                    {editMode ?
+                        <ProfileAboutForm profilePass={profile} setEditMode={setEditMode} />
+                    :
+                        <p style={{whiteSpace: 'pre-wrap'}}>{profile.bio}</p>
+                    }
+                </Grid.Column>
+            </Grid>
+        </Tab.Pane>
+    )
+}
+
+export default observer(ProfileAbout);
