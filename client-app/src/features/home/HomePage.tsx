@@ -1,4 +1,4 @@
-﻿import {Button, Container, Header, Image, Segment} from "semantic-ui-react";
+import {Button, Container, Header, Image, Segment} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import {useStore} from "../../app/stores/store";
 import {observer} from "mobx-react-lite";

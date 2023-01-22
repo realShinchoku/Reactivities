@@ -1,4 +1,4 @@
-﻿import React from 'react'
+import React from 'react'
 import {Image, Item, Label, List, Segment} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react-lite'

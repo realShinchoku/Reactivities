@@ -1,4 +1,4 @@
-﻿import {observer} from 'mobx-react-lite'
+import {observer} from 'mobx-react-lite'
 import React, {useEffect} from 'react'
 import {Comment, Header, Loader, Segment} from 'semantic-ui-react'
 import {useStore} from "../../../app/stores/store";
@@ -53,10 +53,10 @@ function ActivityDetailedChat({activityId}: Props) {
                                         rows={2}
                                         {...props.field}
                                         onKeyDown={e => {
-                                            if (e.key == 'Enter' && e.shiftKey)
+                                            if (e.key === 'Enter' && e.shiftKey)
                                                 return;
 
-                                            if (e.key == 'Enter' && !e.shiftKey) {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
                                                 e.preventDefault();
                                                 isValid && handleSubmit();
                                             }

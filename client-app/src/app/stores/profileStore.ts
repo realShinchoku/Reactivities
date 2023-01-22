@@ -1,4 +1,4 @@
-﻿import {Photo, Profile, ProfileFormValues} from "../models/profile";
+import {Photo, Profile, ProfileFormValues} from "../models/profile";
 import {makeAutoObservable, reaction, runInAction} from "mobx";
 import agent from "../api/agent";
 import {store} from "./store";
@@ -20,7 +20,7 @@ export default class ProfileStore {
         reaction(
             () => this.activeTab,
             async activeTab => {
-                if (activeTab == 3 || activeTab == 4) {
+                if (activeTab === 3 || activeTab === 4) {
                     const predicate = activeTab === 3 ? 'followers' : 'following';
                     await this.loadFollowings(predicate);
                 } else
@@ -31,7 +31,7 @@ export default class ProfileStore {
 
     get isCurrentUser() {
         if (store.userStore.user && this.profile)
-            return store.userStore.user.userName == this.profile.userName;
+            return store.userStore.user.userName === this.profile.userName;
         return false;
     }
 
@@ -81,9 +81,20 @@ export default class ProfileStore {
             await runInAction(async () => {
                 if (this.profile && this.profile.photos) {
                     this.profile.photos.find(p => p.isMain)!.isMain = false;
-                    this.profile.photos.find(p => p.id == photo.id)!.isMain = true;
+                    this.profile.photos.find(p => p.id === photo.id)!.isMain = true;
                     this.profile.image = photo.url;
-                    await store.activityStore.loadActivities();
+
+                    store.activityStore.activityRegistry.forEach(
+                        activity => {
+                            if (activity.hostUserName === this.profile?.userName)
+                                activity.host = this.profile;
+
+                            activity.attendees.forEach((attendee, index, array) => {
+                                if (attendee.userName === this.profile?.userName) {
+                                    array[index] = this.profile;
+                                }
+                            });
+                        });
                     this.loading = false;
                 }
             });
@@ -118,7 +129,14 @@ export default class ProfileStore {
                     let updatedProfile = {...this.profile, ...profile}
                     this.profile = updatedProfile as Profile;
                     store.userStore.setDisplayName(updatedProfile.displayName);
-                    await store.activityStore.loadActivities();
+                    store.activityStore.activityRegistry.forEach(activity => {
+                        activity.host = activity.hostUserName === updatedProfile.userName ? updatedProfile : activity.host;
+                        activity.attendees.forEach((attendee, index, array) => {
+                            if (attendee.userName === this.profile?.userName) {
+                                array[index] = this.profile;
+                            }
+                        });
+                    });
                 }
                 this.loading = false;
             })
@@ -142,7 +160,7 @@ export default class ProfileStore {
                     following ? this.profile.followingCount++ : this.profile.followingCount--;
                 }
                 this.followings.forEach(profile => {
-                    if (profile.userName == userName) {
+                    if (profile.userName === userName) {
                         profile.following ? profile.followersCount-- : profile.followersCount++;
                         profile.following = !profile.following;
                     }

@@ -1,4 +1,4 @@
-﻿import {observer} from "mobx-react-lite";
+import {observer} from "mobx-react-lite";
 import {Button, Grid} from "semantic-ui-react";
 import {Form, Formik} from "formik";
 import MyTextInput from "../../app/common/form/MyTextInput";

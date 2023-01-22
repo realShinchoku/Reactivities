@@ -1,4 +1,4 @@
-﻿import {Grid} from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 import React, {useEffect} from "react";
 import {useStore} from "../../../app/stores/store";
 import LoadingComponent from "../../../app/layout/LoadingComponent";

@@ -1,4 +1,4 @@
-﻿import {Button, Header, Segment} from "semantic-ui-react";
+import {Button, Header, Segment} from "semantic-ui-react";
 import React, {useEffect, useState} from "react";
 import {useStore} from "../../../app/stores/store";
 import {observer} from "mobx-react-lite";

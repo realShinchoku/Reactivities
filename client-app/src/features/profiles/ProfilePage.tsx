@@ -1,4 +1,4 @@
-﻿import {Grid} from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
 import {useParams} from "react-router-dom";
@@ -16,7 +16,7 @@ function ProfilePage() {
         if (username)
             loadProfile(username);
         return () => setActiveTab(0);
-    }, [loadProfile, username,setActiveTab]);
+    }, [loadProfile, username, setActiveTab]);
 
     if (loadingProfile) return <LoadingComponent content={'Loading profile...'}/>
 

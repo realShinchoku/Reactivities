@@ -1,4 +1,4 @@
-﻿import {useField} from "formik";
+import {useField} from "formik";
 import {Form, Label, Select} from "semantic-ui-react";
 
 interface Props {

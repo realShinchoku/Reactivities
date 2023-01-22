@@ -1,4 +1,4 @@
-﻿import {Button, Icon, Item, Label, Segment} from "semantic-ui-react";
+import {Button, Icon, Item, Label, Segment} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import {Activity} from "../../../app/models/activity";
 import {format} from 'date-fns';

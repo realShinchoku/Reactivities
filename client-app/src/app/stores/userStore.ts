@@ -1,4 +1,4 @@
-﻿import {User, UserFormValues} from "../models/user";
+import {User, UserFormValues} from "../models/user";
 import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent";
 import {store} from "./store";

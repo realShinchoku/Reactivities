@@ -1,4 +1,4 @@
-﻿import {observer} from 'mobx-react-lite';
+import {observer} from 'mobx-react-lite';
 import React from 'react'
 import {Grid, Icon, Segment} from 'semantic-ui-react'
 import {Activity} from "../../../app/models/activity";

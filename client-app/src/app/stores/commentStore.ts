@@ -1,4 +1,4 @@
-﻿import {ChatComment} from "../models/comment";
+import {ChatComment} from "../models/comment";
 import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
 import {makeAutoObservable, runInAction} from "mobx";
 import {store} from "./store";
