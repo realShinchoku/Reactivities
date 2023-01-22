@@ -26,12 +26,14 @@ public static class ApplicationServiceExtensions
         services.AddCors(opt =>
         {
             opt.AddPolicy("CorsPolicy",
-                policy => {
+                policy =>
+                {
                     policy
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                    .WithOrigins("http://localhost:3000"); });
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .WithOrigins("http://localhost:3000");
+                });
         });
         services.AddMediatR(typeof(List.Handler));
         services.AddAutoMapper(typeof(MappingProfiles).Assembly);

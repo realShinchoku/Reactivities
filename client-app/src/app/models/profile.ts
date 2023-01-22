@@ -1,10 +1,13 @@
-﻿import {User} from "./user";
+import {User} from "./user";
 
 export interface Profile {
     userName: string;
     displayName: string;
     image?: string;
     bio?: string;
+    followersCount: number;
+    followingCount: number;
+    following: boolean;
     photos?: Photo[];
 }
 

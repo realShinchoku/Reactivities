@@ -32,7 +32,7 @@ public class IsHostRequirementHandler : AuthorizationHandler<IsHostRequirement>
 
         var attendee = _dbContext.ActivityAttendees
             .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.AppUserId == userId && x.ActivityId == activityId).Result;
+            .SingleOrDefaultAsync(x => x.AppUserId.ToString() == userId && x.ActivityId == activityId).Result;
 
         if (attendee == null) return Task.CompletedTask;
 

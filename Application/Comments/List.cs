@@ -13,7 +13,7 @@ public class List
     {
         public Guid ActivityId { get; set; }
     }
-    
+
     public class Handler : IRequestHandler<Query, Result<List<CommentDto>>>
     {
         private readonly DataContext _context;
@@ -24,6 +24,7 @@ public class List
             _context = context;
             _mapper = mapper;
         }
+
         public async Task<Result<List<CommentDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
             var comments = await _context.Comments

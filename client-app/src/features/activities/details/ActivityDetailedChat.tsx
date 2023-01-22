@@ -1,14 +1,10 @@
 ﻿import {observer} from 'mobx-react-lite'
 import React, {useEffect} from 'react'
-import {Button, Comment, Header, Loader, Segment} from 'semantic-ui-react'
+import {Comment, Header, Loader, Segment} from 'semantic-ui-react'
 import {useStore} from "../../../app/stores/store";
 import {Link} from "react-router-dom";
 import {Field, FieldProps, Form, Formik} from "formik";
-import MyTextArea from "../../../app/common/form/MyTextArea";
-import {is} from "date-fns/locale";
 import * as Yup from 'yup';
-import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
 import {formatDistanceToNow} from "date-fns";
 
 interface Props {
@@ -37,7 +33,7 @@ function ActivityDetailedChat({activityId}: Props) {
             >
                 <Header>Chat about this event</Header>
             </Segment>
-            
+
             <Formik initialValues={{body: ''}}
                     validationSchema={Yup.object({
                         body: Yup.string().required()

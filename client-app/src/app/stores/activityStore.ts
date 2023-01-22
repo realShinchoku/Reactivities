@@ -154,6 +154,21 @@ export default class ActivityStore {
         }
     }
 
+    clearSelectedActivity = () => {
+        this.selectedActivity = undefined;
+    }
+
+    updateAttendeeFollowing = (userName: string) => {
+        this.activityRegistry.forEach(activity => {
+            activity.attendees.forEach(attendee => {
+                if (attendee.userName === userName) {
+                    attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+                    attendee.following = !attendee.following;
+                }
+            })
+        })
+    }
+
     private setActivity = (activity: Activity) => {
         const user = store.userStore.user;
         if (user) {
@@ -169,9 +184,5 @@ export default class ActivityStore {
 
     private getActivity = (id: string) => {
         return this.activityRegistry.get(id);
-    }
-    
-    clearSelectedActivity = () => {
-        this.selectedActivity = undefined;
     }
 }

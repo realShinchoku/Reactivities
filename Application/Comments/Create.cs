@@ -16,7 +16,7 @@ public class Create
         public string Body { get; set; }
         public Guid ActivityId { get; set; }
     }
-    
+
     public class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
@@ -24,7 +24,7 @@ public class Create
             RuleFor(x => x.Body).NotEmpty();
         }
     }
-    
+
     public class Handler : IRequestHandler<Command, Result<CommentDto>>
     {
         private readonly DataContext _context;
@@ -37,6 +37,7 @@ public class Create
             _mapper = mapper;
             _userAccessor = userAccessor;
         }
+
         public async Task<Result<CommentDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var activity = await _context.Activities.FindAsync(request.ActivityId, cancellationToken);
@@ -53,14 +54,14 @@ public class Create
                 Activity = activity,
                 Body = request.Body
             };
-            
+
             activity.Comments.Add(comment);
 
             var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
             if (success)
                 return Result<CommentDto>.Success(_mapper.Map<CommentDto>(comment));
-            
+
             return Result<CommentDto>.Failure("Failed to add comment");
         }
     }
