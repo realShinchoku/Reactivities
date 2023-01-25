@@ -4,10 +4,10 @@ import {useStore} from "../../app/stores/store";
 import ProfileCard from "./ProfileCard";
 
 function ProfileFollowings() {
-    const {profileStore: {profile, followings, loadingFollowings, activeTab}} = useStore();
+    const {profileStore: {profile, followings, loadingTab, activeTab}} = useStore();
 
     return (
-        <Tab.Pane loading={loadingFollowings}>
+        <Tab.Pane loading={loadingTab}>
             <Grid>
                 <Grid.Column width={16}>
                     <Header floated={"left"} icon={"user"}

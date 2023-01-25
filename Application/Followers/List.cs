@@ -48,6 +48,8 @@ public class List
                             new { currentUserName = _userAccessor.GetUserName() })
                         .ToListAsync(cancellationToken);
                     break;
+                default:
+                    return null;
             }
 
             return Result<List<Profile>>.Success(profile);
