@@ -12,7 +12,7 @@ COPY "Domain/Domain.csproj" "Domain/Domain.csproj"
 COPY "Infrastructure/Infrastructure.csproj" "Infrastructure/Infrastructure.csproj"
 COPY "Persistence/Persistence.csproj" "Persistence/Persistence.csproj"
 
-RUN dotnet restore --disable-parallel "Reactivities.sln"
+RUN dotnet restore "Reactivities.sln"
 
 COPY . .
 WORKDIR /app
