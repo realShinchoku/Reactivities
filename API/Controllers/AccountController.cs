@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers;
 
@@ -63,9 +64,11 @@ public class AccountController : BaseApiController
 
         var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-        if (result.Succeeded) return CreateUserObject(user);
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+            
+        return CreateUserObject(user);
 
-        return BadRequest(result.Errors);
     }
 
     [Authorize]
@@ -80,12 +83,15 @@ public class AccountController : BaseApiController
 
     private UserDto CreateUserObject(AppUser user)
     {
-        return new UserDto
+        var userDto = new UserDto
         {
             DisplayName = user.DisplayName,
-            Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
             Token = _tokenService.CreateToken(user),
             UserName = user.UserName
         };
+
+        if (!user.Photos.IsNullOrEmpty())
+            userDto.Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url;
+        return userDto;
     }
 }
