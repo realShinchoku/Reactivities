@@ -480,4 +480,5 @@ $RECYCLE.BIN/
 .idea
 
 #
-appsettings.json
+API/appsettings.json
+db-server.txt

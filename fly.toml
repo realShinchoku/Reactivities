@@ -1,6 +1,6 @@
-# fly.toml file generated for small-mountain-525 on 2023-01-28T13:28:18+07:00
+# fly.toml file generated for dawn-tree-7621 on 2023-01-28T20:50:07+07:00
 
-app = "small-mountain-525"
+app = "dawn-tree-7621"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
