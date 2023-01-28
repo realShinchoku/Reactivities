@@ -6,7 +6,7 @@ kill_timeout = 5
 processes = []
 
 [build]
-  image = "realshinchoku/reactivities:latest"
+  image = "realshinchoku/reactivities:pull"
 
 [env]
   ASPNETCORE_URLS = "http://+:8080"
