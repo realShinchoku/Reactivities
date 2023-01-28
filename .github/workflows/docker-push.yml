@@ -24,10 +24,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: realshinchoku/reactivities:latest
+        run: |
+           docker build -t realshinchoku/reactivities:latest .
+           docker push realshinchoku/reactivities:latest
   deploy:
     needs: docker
     name: Deploy app
