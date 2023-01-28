@@ -66,7 +66,7 @@ public static class ApplicationServiceExtensions
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()
-                        .WithOrigins("http://localhost:3000");
+                        .WithOrigins("http://localhost:3000","https://localhost:3000");
                 });
         });
         services.AddMediatR(typeof(List.Handler));
