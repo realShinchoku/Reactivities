@@ -25,7 +25,7 @@ jobs:
       -
         name: Build and push
         run: |
-          cd ../..
+          cd ..
           docker build -t realshinchoku/reactivities:latest .
           docker push realshinchoku/reactivities:latest
   deploy:
