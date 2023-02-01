@@ -13,10 +13,10 @@ namespace API.Controllers;
 [ApiController]
 public class AccountController : BaseApiController
 {
-    private readonly TokenService _tokenService;
     private readonly IConfiguration _config;
-    private readonly UserManager<AppUser> _userManager;
     private readonly HttpClient _httpClient;
+    private readonly TokenService _tokenService;
+    private readonly UserManager<AppUser> _userManager;
 
     public AccountController(UserManager<AppUser> userManager, TokenService tokenService, IConfiguration config)
     {
@@ -40,10 +40,11 @@ public class AccountController : BaseApiController
 
         var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
-        if (result)
-            return CreateUserObject(user);
+        if (!result)
+            return Unauthorized();
 
-        return Unauthorized();
+        await SetRefreshToken(user);
+        return CreateUserObject(user);
     }
 
     [AllowAnonymous]
@@ -73,9 +74,9 @@ public class AccountController : BaseApiController
 
         if (!result.Succeeded)
             return BadRequest(result.Errors);
-            
-        return CreateUserObject(user);
 
+        await SetRefreshToken(user);
+        return CreateUserObject(user);
     }
 
     [Authorize]
@@ -85,6 +86,7 @@ public class AccountController : BaseApiController
         var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(
             x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
+        await SetRefreshToken(user);
         return CreateUserObject(user);
     }
 
@@ -98,7 +100,7 @@ public class AccountController : BaseApiController
         if (!verifyTokenResponse.IsSuccessStatusCode) return Unauthorized();
 
         var fbUrl = $"me?access_token={accessToken}&fields=name,email,picture.width(100).height(100)";
-        
+
         var fbInfo = await _httpClient.GetFromJsonAsync<FacebookDto>(fbUrl);
 
         var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Email == fbInfo.Email);
@@ -113,11 +115,12 @@ public class AccountController : BaseApiController
                 user.Photos.First(x => x.IsMain).IsMain = false;
                 user.Photos.Add(new Photo
                 {
-                    Id = "fb_" + fbInfo.Id + user.Photos.Count.ToString(),
+                    Id = "fb_" + fbInfo.Id + user.Photos.Count,
                     Url = fbInfo.Picture.Data.Url,
-                    IsMain = true,
+                    IsMain = true
                 });
             }
+
             user.DisplayName = fbInfo.Name;
             result = await _userManager.UpdateAsync(user);
         }
@@ -130,19 +133,39 @@ public class AccountController : BaseApiController
                 UserName = "fb_" + fbInfo.Id,
                 Photos = new List<Photo>
                 {
-                    new Photo
+                    new()
                     {
                         Id = "fb_" + fbInfo.Id,
                         Url = fbInfo.Picture.Data.Url,
-                        IsMain = true,
+                        IsMain = true
                     }
                 }
             };
-            
+
             result = await _userManager.CreateAsync(user);
         }
 
-        if(!result.Succeeded) return BadRequest("Problem creating user account");
+        if (!result.Succeeded) return BadRequest("Problem creating user account");
+
+        await SetRefreshToken(user);
+
+        return CreateUserObject(user);
+    }
+
+    [Authorize]
+    [HttpPost("refreshToken")]
+    public async Task<ActionResult<UserDto>> RefreshToken()
+    {
+        var refreshToken = Request.Cookies["refreshToken"];
+        var user = await _userManager.Users.Include(r => r.RefreshTokens).Include(p => p.Photos)
+            .FirstOrDefaultAsync(x => x.UserName == User.FindFirstValue(ClaimTypes.Name));
+
+        if (user == null)
+            return Unauthorized();
+
+        var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+
+        if (oldToken != null && !oldToken.IsActive) return Unauthorized();
 
         return CreateUserObject(user);
     }
@@ -158,6 +181,24 @@ public class AccountController : BaseApiController
 
         if (!user.Photos.IsNullOrEmpty())
             userDto.Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url;
+
+
         return userDto;
+    }
+
+    private async Task SetRefreshToken(AppUser user)
+    {
+        var refreshToken = _tokenService.GenerateRefreshToken();
+        user.RefreshTokens.Add(refreshToken);
+
+        await _userManager.UpdateAsync(user);
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = refreshToken.Expires
+        };
+
+        Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
     }
 }

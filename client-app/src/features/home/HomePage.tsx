@@ -32,7 +32,7 @@ function HomePage() {
                             Register
                         </Button>
                         <Divider horizontal inverted>Or</Divider>
-                        
+
                         <Button
                             as={FacebookLogin}
                             appId={'1289274284966085'}
@@ -41,14 +41,14 @@ function HomePage() {
                             color={"facebook"}
                             content={'Login with Facebook'}
                             loading={userStore.fbLoading}
-                            onSuccess={async (response:any) =>{
-                               await userStore.facebookLogin(response.accessToken);
+                            onSuccess={async (response: any) => {
+                                await userStore.facebookLogin(response.accessToken);
                             }}
-                            onFail={(response:any) =>{
+                            onFail={(response: any) => {
                                 console.log('fail', response)
                             }}
                         />
-                        
+
                     </>
                 )}
 

@@ -68,6 +68,18 @@ export default class ProfileStore {
                     if (photo.isMain && store.userStore.user) {
                         store.userStore.setImage(photo.url);
                         this.profile.image = photo.url;
+
+                        store.activityStore.activityRegistry.forEach(
+                            activity => {
+                                if (activity.hostUserName === this.profile?.userName)
+                                    activity.host = this.profile;
+
+                                activity.attendees.forEach((attendee, index, array) => {
+                                    if (attendee.userName === this.profile?.userName) {
+                                        array[index] = this.profile;
+                                    }
+                                });
+                            });
                     }
                 }
                 this.uploading = false;
@@ -196,10 +208,7 @@ export default class ProfileStore {
         this.loadingTab = true;
         try {
             const userActivities = await agent.Profiles.listActivities(this.profile!.userName, predicate!);
-            runInAction(() => {
-                this.userActivities = userActivities;
-                console.log(this.userActivities);
-            });
+            runInAction(() => this.userActivities = userActivities);
         } catch (e) {
             console.log(e);
         } finally {
