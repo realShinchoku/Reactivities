@@ -49,14 +49,14 @@ export default class UserStore {
 
     register = async (formValues: UserFormValues) => {
         try {
-            const user = await agent.Account.register(formValues);
-            store.commonStore.setToken(user.token);
-            this.startRefreshTokenTimer(user);
-            runInAction(() => this.user = user);
+            await agent.Account.register(formValues);
             store.modalStore.closeModal();
-            router.navigate('/activities');
-        } catch (err) {
-            throw err;
+            await router.navigate(`/account/registerSuccess?email=${formValues.email}`);
+        } catch (err: any) {
+            if (err?.response?.status === 400)
+                throw err;
+            store.modalStore.closeModal();
+            console.log(500)
         }
     }
 
@@ -101,7 +101,6 @@ export default class UserStore {
         const jwtToken = JSON.parse(atob(user.token.split('.')[1]));
         const expires = new Date(jwtToken.exp * 1000);
         const timeout = expires.getTime() - Date.now() - (120 * 1000);
-        console.log(timeout);
         this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
     }
 

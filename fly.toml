@@ -13,6 +13,7 @@ ASPNETCORE_URLS = "http://+:8080"
 Cloudinary__ApiKey = "263882437792252"
 Cloudinary__CloudName = "dugxaolpx"
 Facebook__AppId = "1289274284966085"
+Sendgrid__User = "3ubpl0ra@duck.com"
 
 [experimental]
 auto_rollback = true
