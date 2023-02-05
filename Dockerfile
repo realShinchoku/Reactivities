@@ -13,6 +13,7 @@ COPY "Infrastructure/Infrastructure.csproj" "Infrastructure/Infrastructure.cspro
 COPY "Persistence/Persistence.csproj" "Persistence/Persistence.csproj"
 
 RUN dotnet restore "Reactivities.sln"
+RUN dotnet ef database drop -s API -p Persistence
 
 COPY . .
 WORKDIR /app
