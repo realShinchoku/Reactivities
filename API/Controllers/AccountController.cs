@@ -51,7 +51,7 @@ public class AccountController : BaseApiController
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
         if (!result.Succeeded)
-            return Unauthorized();
+            return Unauthorized("Invalid password");
 
         await SetRefreshToken(user);
         return CreateUserObject(user);
@@ -62,16 +62,10 @@ public class AccountController : BaseApiController
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
         if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName))
-        {
-            ModelState.AddModelError("userName", "Username is already taken");
-            return BadRequest(ModelState);
-        }
+            return Conflict("Username is already taken");
 
         if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
-        {
-            ModelState.AddModelError("email", "Email is already taken");
-            return BadRequest(ModelState);
-        }
+            return Conflict("Email is already taken");
 
         var user = new AppUser
         {
@@ -167,8 +161,20 @@ public class AccountController : BaseApiController
 
         if (user != null)
         {
-            var photo = user.Photos.First(x => x.IsMain);
-            if (photo.Url != fbInfo.Picture.Data.Url)
+            var photo = user.Photos.FirstOrDefault(x => x.IsMain);
+            if (photo == null)
+            {
+                user.Photos = new List<Photo>
+                {
+                    new()
+                    {
+                        Id = "fb_" + fbInfo.Id,
+                        Url = fbInfo.Picture.Data.Url,
+                        IsMain = true
+                    }
+                };
+            }
+            else if (photo.Url != fbInfo.Picture.Data.Url)
             {
                 user.Photos.First(x => x.IsMain).IsMain = false;
                 user.Photos.Add(new Photo
@@ -179,8 +185,11 @@ public class AccountController : BaseApiController
                 });
             }
 
-            user.DisplayName = fbInfo.Name;
-            result = await _userManager.UpdateAsync(user);
+            if (photo == null || photo.Url != fbInfo.Picture.Data.Url)
+            {
+                result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded) return BadRequest("Problem updating user account");
+            }
         }
         else
         {
@@ -196,15 +205,14 @@ public class AccountController : BaseApiController
                     {
                         Id = "fb_" + fbInfo.Id,
                         Url = fbInfo.Picture.Data.Url,
-                        IsMain = true,
+                        IsMain = true
                     }
                 }
             };
 
             result = await _userManager.CreateAsync(user);
+            if (!result.Succeeded) return BadRequest("Problem creating user account");
         }
-
-        if (!result.Succeeded) return BadRequest("Problem creating user account");
 
         await SetRefreshToken(user);
 

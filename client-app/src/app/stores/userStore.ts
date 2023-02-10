@@ -24,16 +24,16 @@ export default class UserStore {
             this.startRefreshTokenTimer(user);
             runInAction(() => this.user = user);
             store.modalStore.closeModal();
-            router.navigate('/activities');
+            await router.navigate('/activities');
         } catch (err) {
             throw err;
         }
     }
 
-    logout = () => {
+    logout = async () => {
         store.commonStore.setToken(null);
         this.user = null;
-        router.navigate('/');
+        await router.navigate('/');
     }
 
     getUser = async () => {
@@ -52,11 +52,8 @@ export default class UserStore {
             await agent.Account.register(formValues);
             store.modalStore.closeModal();
             await router.navigate(`/account/registerSuccess?email=${formValues.email}`);
-        } catch (err: any) {
-            if (err?.response?.status === 400)
-                throw err;
-            store.modalStore.closeModal();
-            console.log(500)
+        } catch (err) {
+            throw err;
         }
     }
 

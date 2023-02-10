@@ -3,6 +3,7 @@ import MyTextInput from "../../app/common/form/MyTextInput";
 import {Button, Header, Label} from "semantic-ui-react";
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../app/stores/store";
+import * as Yup from "yup";
 
 function LoginForm() {
     const {userStore} = useStore();
@@ -12,6 +13,10 @@ function LoginForm() {
             initialValues={{email: '', password: '', error: null}}
             onSubmit={(values, {setErrors}) => userStore.login(values).catch(err =>
                 setErrors({error: err.response.data}))}
+            validationSchema={Yup.object({
+                email: Yup.string().email().required(),
+                password: Yup.string().required(),
+            })}
         >
             {({handleSubmit, isSubmitting, errors}) => (
                 <Form className="ui form" onSubmit={handleSubmit} autoComplete={'off'}>

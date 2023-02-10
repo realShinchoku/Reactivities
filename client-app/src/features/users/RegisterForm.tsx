@@ -1,10 +1,9 @@
 import {ErrorMessage, Form, Formik} from "formik";
 import MyTextInput from "../../app/common/form/MyTextInput";
-import {Button, Header} from "semantic-ui-react";
+import {Button, Header, Label} from "semantic-ui-react";
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../app/stores/store";
 import * as Yup from "yup";
-import ValidationError from "../Error/ValidationError";
 
 function RegisterForm() {
     const {userStore} = useStore();
@@ -29,7 +28,7 @@ function RegisterForm() {
                     <MyTextInput placeholder={'Password'} name={'password'} type={'password'}/>
                     <ErrorMessage
                         name={'error'}
-                        render={() => <ValidationError errors={errors.error}/>}
+                        render={() => <Label style={{marginBottom: 10}} basic color={"red"} content={errors.error}/>}
                     />
                     <Button
                         disabled={!isValid || !dirty || isSubmitting}

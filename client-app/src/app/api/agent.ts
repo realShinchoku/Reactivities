@@ -62,6 +62,9 @@ axios.interceptors.response.use(async response => {
         case 404:
             router.navigate('/not-found');
             break;
+        case 409:
+            throw data;
+            break;
         case 500:
             store.commonStore.setServerError(data);
             router.navigate('/server-error');

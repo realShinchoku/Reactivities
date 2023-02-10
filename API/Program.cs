@@ -27,15 +27,19 @@ app.UseXContentTypeOptions();
 app.UseReferrerPolicy(opt => opt.NoReferrer());
 app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
 app.UseXfo(opt => opt.Deny());
-app.UseCsp(opt => opt
+app.UseCspReportOnly(opt => opt
     .BlockAllMixedContent()
     .StyleSources(s =>
-        s.Self().CustomSources("https://fonts.googleapis.com", "sha256-DpOoqibK/BsYhobWHnU38Pyzt5SjDZuR/mFsAiVN7kk="))
+        s.Self().CustomSources("https://fonts.googleapis.com", "sha256-sZxz778M2iREo4Nh3EShjMAXSfzp6KIYk9PaSEU/YLc=",
+            "sha256-jQFDEZeJDHp4BeY4xlNHzw9ZmJ2nmra4kTvVh9J+55A=",
+            "sha256-VdJLYZrBOhBJj2L4/+iZupDWpR1sppzSbgJzXdO/Oss=",
+            "sha256-DpOoqibK/BsYhobWHnU38Pyzt5SjDZuR/mFsAiVN7kk="))
     .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
     .FormActions(s => s.Self())
     .FrameAncestors(s => s.Self())
     .ImageSources(s =>
-        s.Self().CustomSources("blod:", "data:", "https://res.cloudinary.com", "https://platform-lookaside.fbsbx.com"))
+        s.Self().CustomSources("blod:", "data:", "https://res.cloudinary.com", "https://platform-lookaside.fbsbx.com",
+            "https://web.facebook.com"))
     .ScriptSources(s => s.Self().CustomSources("https://connect.facebook.net/"))
 );
 
