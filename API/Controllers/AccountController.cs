@@ -174,14 +174,13 @@ public class AccountController : BaseApiController
                     }
                 };
             }
-            else if (photo.Url != fbInfo.Picture.Data.Url)
+            else if (user.Photos.All(x => x.Url != fbInfo.Picture.Data.Url))
             {
-                user.Photos.First(x => x.IsMain).IsMain = false;
                 user.Photos.Add(new Photo
                 {
                     Id = "fb_" + fbInfo.Id + user.Photos.Count,
                     Url = fbInfo.Picture.Data.Url,
-                    IsMain = true
+                    IsMain = false
                 });
             }
 
