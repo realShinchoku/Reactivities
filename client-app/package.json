@@ -20,7 +20,7 @@
     "install": "^0.13.0",
     "mobx": "^6.7.0",
     "mobx-react-lite": "^3.4.0",
-    "npm": "^9.4.1",
+    "npm": "^10.5.2",
     "react": "^18.2.0",
     "react-calendar": "^4.0.0",
     "react-cropper": "^2.1.8",
